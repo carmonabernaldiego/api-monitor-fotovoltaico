@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard de Monitoreo de Energía Solar</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      body {
+        padding: 20px;
+      }
+      .image-container {
+        margin-top: 20px;
+      }
+      .image-container img {
+        width: 100%;
+        max-width: 1000px;
+        border: 1px solid #ccc;
+      }
+      .chart-title {
+        font-weight: bold;
+        font-size: 18px;
+      }
+      .chart-controls button {
+        margin-left: 5px;
+      }
+      .placeholder {
+        color: #888;
+        padding: 60px 0;
+      }
+      .tabcontent {
+        display: none;
+      }
+      .tablink.active {
+        background-color: #ddd;
+      }
+      .metric-card {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-align: center;
+      }
+      .alert-list {
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .summary-container {
+        margin-bottom: 20px;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        border-left: 5px solid #17a2b8;
+      }
+      .summary-container pre {
+        white-space: pre-wrap;
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Monitoreo de Energía Solar</h1>
+        <div class="d-flex align-items-center">
+          <label class="me-2">Rango de fecha:</label>
+          <input id="start_date" type="date" value="2022-01-01" />
+          <span class="mx-2">–</span>
+          <input id="end_date" type="date" value="2022-12-31" />
+          <button class="btn btn-outline-secondary ms-3" onclick="refreshAll()">
+            ⟳ Actualizar
+          </button>
+        </div>
+      </header>
+
+      <div class="tabs mb-4">
+        <button class="tablink active" onclick="openTab(event,'Dashboard')">
+          Dashboard
+        </button>
+        <button class="tablink" onclick="openTab(event,'Inversores')">
+          Inversores
+        </button>
+        <button class="tablink" onclick="openTab(event,'Alertas')">
+          Alertas
+        </button>
+        <button class="tablink" onclick="openTab(event,'Predicciones')">
+          Predicciones
+        </button>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div id="Dashboard" class="tabcontent" style="display: block">
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div id="prMetric" class="metric-card">PR: —</div>
+          </div>
+          <div class="col-md-3">
+            <div id="yieldMetric" class="metric-card">Rend. Esp.: —</div>
+          </div>
+          <div class="col-md-3">
+            <div id="energyMetric" class="metric-card">Energía: —</div>
+          </div>
+          <div class="col-md-3">
+            <div id="peakMetric" class="metric-card">Pico: —</div>
+          </div>
+        </div>
+
+        <!-- Potencia -->
+        <div class="chart-container mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="chart-title">Potencia AC por Inversor (kW)</div>
+            <div class="chart-controls">
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('power','powerContainer','D')"
+              >
+                Hoy
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('power','powerContainer','W')"
+              >
+                Semana
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('power','powerContainer','M')"
+              >
+                Mes
+              </button>
+            </div>
+          </div>
+          <div id="powerContainer" class="image-container text-center">
+            <div class="placeholder">
+              Seleccione "Hoy", "Semana" o "Mes" para ver el gráfico
+            </div>
+          </div>
+        </div>
+
+        <!-- Ambiental -->
+        <div class="chart-container mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="chart-title">Condiciones Ambientales</div>
+            <div class="chart-controls">
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('environment','envContainer','D')"
+              >
+                Día
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('environment','envContainer','W')"
+              >
+                Semana
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('environment','envContainer','M')"
+              >
+                Mes
+              </button>
+            </div>
+          </div>
+          <div id="envContainer" class="image-container text-center">
+            <div class="placeholder">
+              Seleccione un periodo para ver el gráfico
+            </div>
+          </div>
+        </div>
+
+        <!-- Correlación -->
+        <div class="chart-container mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="chart-title">
+              Irradiancia Solar vs Producción de Energía
+            </div>
+            <div class="chart-controls">
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('correlation','corrContainer','D')"
+              >
+                Día
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('correlation','corrContainer','W')"
+              >
+                Semana
+              </button>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="fetchGraph('correlation','corrContainer','M')"
+              >
+                Mes
+              </button>
+            </div>
+          </div>
+          <div id="corrContainer" class="image-container text-center">
+            <div class="placeholder">
+              Seleccione un periodo para ver el gráfico
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESUMEN -->
+      <div id="Resumen" class="tabcontent">
+        <div id="summaryContainer" class="summary-container">
+          <div class="placeholder">Cargando resumen ejecutivo...</div>
+        </div>
+      </div>
+
+      <!-- INVERSORES -->
+      <div id="Inversores" class="tabcontent">
+        <h3>Estado de Inversores</h3>
+        <div id="invertersContainer" class="row">
+          <div class="placeholder">Cargando inversores...</div>
+        </div>
+      </div>
+
+      <!-- ALERTAS -->
+      <div id="Alertas" class="tabcontent">
+        <h3>Alertas Detectadas</h3>
+        <div id="alertsContainer" class="alert-list">
+          <div class="placeholder">Cargando alertas...</div>
+        </div>
+      </div>
+
+      <!-- PREDICCIONES -->
+      <div id="Predicciones" class="tabcontent">
+        <h3>Predicción de Producción</h3>
+        <div id="forecastContainer">
+          <div class="placeholder">Cargando predicciones...</div>
+        </div>
+      </div>
+
+      <footer class="mt-5 text-center">
+        © 2025 Universidad Politécnica de Chiapas
+      </footer>
+    </div>
+
+    <script>
+      const API_BASE = "http://127.0.0.1:8000";
+
+      function openTab(evt, name) {
+        document
+          .querySelectorAll(".tabcontent")
+          .forEach((tc) => (tc.style.display = "none"));
+        document
+          .querySelectorAll(".tablink")
+          .forEach((tl) => tl.classList.remove("active"));
+        document.getElementById(name).style.display = "block";
+        evt.currentTarget.classList.add("active");
+
+        if (name === "Dashboard") {
+          fetchMetrics();
+        }
+        if (name === "Inversores") {
+          fetchInverters();
+        }
+        if (name === "Alertas") {
+          fetchAlerts();
+        }
+        if (name === "Predicciones") {
+          fetchForecast();
+        }
+      }
+
+      function getParams(freq) {
+        const p = new URLSearchParams({
+          start_date: document.getElementById("start_date").value,
+          end_date: document.getElementById("end_date").value,
+        });
+        if (freq) p.append("freq", freq);
+        return p.toString();
+      }
+
+      async function fetchWithError(url) {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
+      }
+
+      async function fetchGraph(ep, container, freq) {
+        const c = document.getElementById(container);
+        c.innerHTML = '<div class="placeholder">Cargando...</div>';
+        try {
+          const { image_url } = await fetchWithError(
+            `${API_BASE}/graph/${ep}?${getParams(freq)}`
+          );
+          c.innerHTML = `<img src="${API_BASE}${image_url}" alt="${ep}" />`;
+        } catch {
+          c.innerHTML =
+            '<div class="placeholder text-danger">Error cargando gráfico</div>';
+        }
+      }
+
+      async function fetchMetrics() {
+        try {
+          const d = await fetchWithError(`${API_BASE}/metrics?${getParams()}`);
+          document.getElementById("prMetric").textContent = `PR: ${
+            d.performance_ratio?.toFixed(2) || "N/A"
+          }`;
+          document.getElementById("yieldMetric").textContent = `Rend. Esp.: ${
+            d.specific_yield?.toFixed(2) || "N/A"
+          }`;
+          document.getElementById("energyMetric").textContent = `Energía: ${
+            d.daily_energy_total?.toFixed(2) || "N/A"
+          }`;
+          document.getElementById("peakMetric").textContent = `Pico: ${
+            d.peak_power?.toFixed(2) || "N/A"
+          } kW`;
+        } catch {
+          document
+            .querySelectorAll(".metric-card")
+            .forEach((c) => (c.textContent = "Error"));
+        }
+      }
+
+      async function fetchAlerts() {
+        const c = document.getElementById("alertsContainer");
+        c.innerHTML = '<div class="placeholder">Cargando alertas...</div>';
+        try {
+          const d = await fetchWithError(`${API_BASE}/metrics?${getParams()}`);
+          if (!d.alerts?.length) {
+            c.innerHTML =
+              '<div class="alert alert-success">No hay alertas</div>';
+          } else {
+            c.innerHTML = d.alerts
+              .map((a) => `<div class="alert alert-warning">${a}</div>`)
+              .join("");
+          }
+        } catch {
+          c.innerHTML =
+            '<div class="alert alert-danger">Error cargando alertas</div>';
+        }
+      }
+
+      async function fetchForecast() {
+        const c = document.getElementById("forecastContainer");
+        c.innerHTML = '<div class="placeholder">Cargando predicciones...</div>';
+        try {
+          const d = await fetchWithError(`${API_BASE}/forecast?${getParams()}`);
+          let html = `<div class="alert alert-info"><strong>Energía diaria:</strong> ${d.daily_energy_forecast_kwh.toFixed(
+            2
+          )} kWh</div>
+            <table class="table"><thead><tr><th>Hora</th><th>kW</th></tr></thead><tbody>`;
+          d.forecasted_hourly_data.slice(0, 24).forEach((r) => {
+            const dt = new Date(r.measured_on).toLocaleTimeString();
+            html += `<tr><td>${dt}</td><td>${r.forecasted_power.toFixed(
+              2
+            )}</td></tr>`;
+          });
+          html += `</tbody></table>`;
+          c.innerHTML = html;
+        } catch {
+          c.innerHTML =
+            '<div class="alert alert-danger">Error cargando predicciones</div>';
+        }
+      }
+
+      async function fetchInverters() {
+        const c = document.getElementById("invertersContainer");
+        c.innerHTML = '<div class="placeholder">Cargando inversores...</div>';
+        try {
+          const list = await fetchWithError(`${API_BASE}/inverters/status`);
+          if (!list.length) {
+            c.innerHTML =
+              '<div class="alert alert-warning">No hay datos de inversores</div>';
+            return;
+          }
+          c.innerHTML = list
+            .map(
+              (inv) => `
+            <div class="col-md-4 mb-3">
+              <div class="card p-3">
+                <h5>${inv.name}</h5>
+                <p>Vdc: ${inv.voltage_dc} V</p>
+                <p>Idc: ${inv.current_dc} A</p>
+                <p>Pac: ${inv.ac_power} kW</p>
+                <p>Eff: ${inv.efficiency || "N/A"}%</p>
+                <span class="badge bg-${
+                  inv.status === "Activo" ? "success" : "warning"
+                }">${inv.status}</span>
+              </div>
+            </div>
+          `
+            )
+            .join("");
+        } catch {
+          c.innerHTML =
+            '<div class="alert alert-danger">Error cargando inversores</div>';
+        }
+      }
+
+      function refreshAll() {
+        ["powerContainer", "envContainer", "corrContainer"].forEach((id) => {
+          document.getElementById(id).innerHTML =
+            '<div class="placeholder">Seleccione un periodo para ver el gráfico</div>';
+        });
+        const active = document.querySelector(".tablink.active");
+        if (active)
+          openTab({ currentTarget: active }, active.textContent.trim());
+      }
+
+      window.onload = () => {
+        document.querySelector(".tablink.active").click();
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
