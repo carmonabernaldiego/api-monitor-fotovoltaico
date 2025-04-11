@@ -29,8 +29,10 @@
         margin-left: 5px;
       }
       .placeholder {
-        color: #888;
-        padding: 60px 0;
+        background-color: #888;
+        color: #fff;
+        font-weight: bolder;
+        padding: 60px 20px;
       }
       .tabcontent {
         display: none;
@@ -117,7 +119,7 @@
                 class="btn btn-sm btn-outline-primary"
                 onclick="fetchGraph('power','powerContainer','D')"
               >
-                Hoy
+                Día
               </button>
               <button
                 class="btn btn-sm btn-outline-primary"
@@ -135,7 +137,7 @@
           </div>
           <div id="powerContainer" class="image-container text-center">
             <div class="placeholder">
-              Seleccione "Hoy", "Semana" o "Mes" para ver el gráfico
+              Seleccione "Día", "Semana" o "Mes" para ver el gráfico
             </div>
           </div>
         </div>
@@ -367,7 +369,10 @@
         const c = document.getElementById("invertersContainer");
         c.innerHTML = '<div class="placeholder">Cargando inversores...</div>';
         try {
-          const list = await fetchWithError(`${API_BASE}/inverters/status`);
+          const res = await fetch(
+            `${API_BASE}/inverters/status?${getParams()}`
+          );
+          const list = await res.json();
           if (!list.length) {
             c.innerHTML =
               '<div class="alert alert-warning">No hay datos de inversores</div>';
@@ -398,13 +403,20 @@
       }
 
       function refreshAll() {
+        // Reiniciar placeholders
         ["powerContainer", "envContainer", "corrContainer"].forEach((id) => {
           document.getElementById(id).innerHTML =
             '<div class="placeholder">Seleccione un periodo para ver el gráfico</div>';
         });
+
+        // Llamar SÍ o SÍ a las métricas
+        fetchMetrics();
+
+        // Luego llamo a la función de la pestaña activa
         const active = document.querySelector(".tablink.active");
-        if (active)
+        if (active) {
           openTab({ currentTarget: active }, active.textContent.trim());
+        }
       }
 
       window.onload = () => {

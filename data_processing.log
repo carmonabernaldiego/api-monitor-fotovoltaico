@@ -182,3 +182,73 @@
 2025-04-10 15:34:37,700 - ERROR - Error generando resumen: Invalid format specifier '.2f if pr_val else 'N/A'' for object of type 'float'
 2025-04-10 15:39:05,060 - ERROR - Error generando resumen: Invalid format specifier '.2f if pr_val else 'N/A'' for object of type 'float'
 2025-04-10 15:41:06,933 - ERROR - Error generando resumen: Invalid format specifier '.2f if pr_val else 'N/A'' for object of type 'float'
+2025-04-10 16:02:51,141 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 16:02:59,237 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 8.10s
+2025-04-10 16:03:52,870 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 16:05:15,337 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 16:05:24,843 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 9.52s
+2025-04-10 16:06:13,515 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 16:22:34,359 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 16:22:42,208 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 7.85s
+2025-04-10 16:23:36,236 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 17:11:57,744 - INFO - Datos eléctricos originales cargados; se limpiarán en startup
+2025-04-10 17:11:58,909 - INFO - Datos ambientales originales cargados; se limpiarán en startup
+2025-04-10 17:12:01,027 - INFO - Datos de irradiancia originales cargados; se limpiarán en startup
+2025-04-10 17:12:01,027 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 17:12:08,919 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 7.89s
+2025-04-10 17:13:39,097 - INFO - Datos listos para la API
+2025-04-10 17:25:17,596 - INFO - Datos eléctricos limpios cargados desde archivo existente
+2025-04-10 17:25:18,668 - INFO - Datos ambientales limpios cargados desde archivo existente
+2025-04-10 17:25:21,005 - INFO - Datos de irradiancia limpios cargados desde archivo existente
+2025-04-10 17:25:21,005 - INFO - Datos listos para la API
+2025-04-10 17:29:15,488 - INFO - Datos eléctricos limpios cargados desde archivo existente
+2025-04-10 17:29:16,655 - INFO - Datos ambientales limpios cargados desde archivo existente
+2025-04-10 17:29:19,157 - INFO - Datos de irradiancia limpios cargados desde archivo existente
+2025-04-10 17:29:19,157 - INFO - Datos listos para la API
+2025-04-10 17:32:25,258 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 17:32:33,191 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 7.93s
+2025-04-10 17:33:24,203 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:11:03,853 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 20:11:11,858 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 8.00s
+2025-04-10 20:12:02,122 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:23:13,210 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 20:23:23,205 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 10.00s
+2025-04-10 20:24:29,620 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:26:04,292 - INFO - Inicio limpieza eléctrico: 632952 registros
+2025-04-10 20:26:13,551 - INFO - Limpieza eléctrica completada: se eliminaron 305216 registros en 9.26s
+2025-04-10 20:27:17,225 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:39:31,023 - INFO - package: mysql.connector.plugins
+2025-04-10 20:39:31,023 - INFO - plugin_name: mysql_native_password
+2025-04-10 20:39:31,023 - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-04-10 20:40:42,968 - INFO - Datos cargados desde la base de datos
+2025-04-10 20:42:00,531 - INFO - package: mysql.connector.plugins
+2025-04-10 20:42:00,531 - INFO - plugin_name: mysql_native_password
+2025-04-10 20:42:00,531 - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-04-10 20:43:02,594 - INFO - Datos cargados desde la base de datos
+2025-04-10 20:43:02,594 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:49:40,287 - INFO - package: mysql.connector.plugins
+2025-04-10 20:49:40,287 - INFO - plugin_name: mysql_native_password
+2025-04-10 20:49:40,287 - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-04-10 20:51:11,203 - INFO - Datos cargados desde la base de datos
+2025-04-10 20:51:11,203 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:51:16,869 - INFO - package: mysql.connector.plugins
+2025-04-10 20:51:16,870 - INFO - plugin_name: mysql_native_password
+2025-04-10 20:51:16,872 - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-04-10 20:52:32,222 - INFO - Datos cargados desde la base de datos
+2025-04-10 20:52:32,222 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:54:53,594 - ERROR - Error al cargar datos desde MySQL: (mysql.connector.errors.InterfaceError) 2003: Can't connect to MySQL server on 'solar-db.c7g9example.us-east-1.rds.amazonaws.com:3306' (Errno 11001: getaddrinfo failed)
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-04-10 20:54:53,594 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:55:17,022 - ERROR - Error al cargar datos desde MySQL: (mysql.connector.errors.InterfaceError) 2003: Can't connect to MySQL server on 'solar-db.c7g9example.us-east-1.rds.amazonaws.com:3306' (Errno 11001: getaddrinfo failed)
+(Background on this error at: https://sqlalche.me/e/20/rvf5)
+2025-04-10 20:55:17,022 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 20:56:12,917 - ERROR - Error al cargar datos desde MySQL: (mysql.connector.errors.ConnectionTimeoutError) 2003: Can't connect to MySQL server on 'database-monitor-solar.c388c6akq1gk.us-east-2.rds.amazonaws.com:3306' (Errno 10060: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder)
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2025-04-10 20:56:12,917 - INFO - Datos cargados y limpios al iniciar la API
+2025-04-10 21:15:19,857 - INFO - package: mysql.connector.plugins
+2025-04-10 21:15:19,857 - INFO - plugin_name: mysql_native_password
+2025-04-10 21:15:19,857 - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2025-04-10 21:15:21,904 - ERROR - Error al cargar datos desde MySQL: (mysql.connector.errors.ProgrammingError) 1146 (42S02): Table 'solar_data.environment_data' doesn't exist
+[SQL: SELECT * FROM environment_data]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-04-10 21:15:21,904 - INFO - Datos cargados y limpios al iniciar la API

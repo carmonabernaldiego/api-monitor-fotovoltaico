@@ -412,9 +412,9 @@ def startup_event():
     Al iniciar el servidor, cargamos y limpiamos datos para que estén disponibles en endpoints.
     """
     cleaner.load_data()
-    cleaner.clean_electrical_data()
-    cleaner.clean_environment_data()
-    cleaner.clean_irradiance_data()
+    #cleaner.clean_electrical_data()
+    #cleaner.clean_environment_data()
+    #cleaner.clean_irradiance_data()
     logging.info("Datos cargados y limpios al iniciar la API")
 
 @app.get("/")
@@ -579,52 +579,54 @@ def summary(capacidad_instalada: float = 100.0):
     return resumen
 
 @app.get("/inverters/status")
-def get_inverters_status():
+def get_inverters_status(
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None
+):
     """
-    Devuelve el estado de los inversores basado en los datos eléctricos más recientes
+    Devuelve el estado de los inversores basándose en los datos eléctricos
+    en el rango de fechas seleccionado.
     """
-    elec = cleaner.electrical_data.copy()
+    df = cleaner.electrical_data.copy()
+
+    # Filtrar por fecha si el usuario especifica start/end
+    if start_date or end_date:
+        df = cleaner.filter_by_date(df, start_date, end_date)
     
-    # Obtener las últimas mediciones
-    elec.sort_values('measured_on', inplace=True)
-    latest_data = elec.iloc[-1:].copy() if not elec.empty else None
+    df.sort_values('measured_on', inplace=True)
     
-    if latest_data is None or latest_data.empty:
+    if df.empty:
         return []
-        
-    # Identificar columnas de inversores
-    ac_power_cols = [col for col in elec.columns if 'ac_power' in col]
-    dc_voltage_cols = [col for col in elec.columns if 'dc_voltage' in col]
-    dc_current_cols = [col for col in elec.columns if 'dc_current' in col]
+    
+    latest_data = df.iloc[-1]  # la última fila
+    ac_power_cols = [col for col in df.columns if 'ac_power' in col]
+    dc_voltage_cols = [col for col in df.columns if 'dc_voltage' in col]
+    dc_current_cols = [col for col in df.columns if 'dc_current' in col]
     
     inverters = []
     for col in ac_power_cols:
         inv_num = col.split('_')[1]
-        
-        # Buscar columnas relacionadas para este inversor
+
+        # Buscar columnas DC relacionadas
         vdc_col = next((c for c in dc_voltage_cols if f'_{inv_num}_' in c), None)
         idc_col = next((c for c in dc_current_cols if f'_{inv_num}_' in c), None)
-        
-        power = float(latest_data[col].iloc[0]) if col in latest_data else 0
-        voltage = float(latest_data[vdc_col].iloc[0]) if vdc_col and vdc_col in latest_data else 0
-        current = float(latest_data[idc_col].iloc[0]) if idc_col and idc_col in latest_data else 0
-        
-        # Calcular eficiencia si es posible
+
+        ac_power = float(latest_data[col])
+        voltage = float(latest_data[vdc_col]) if vdc_col in latest_data else 0
+        current = float(latest_data[idc_col]) if idc_col in latest_data else 0
         dc_power = voltage * current
-        efficiency = round((power / dc_power * 100) if dc_power > 0 else 0, 2)
+        efficiency = round((ac_power/dc_power*100), 2) if dc_power>0 else 0
         
-        # Determinar estado
-        status = "Activo" if power > 0.1 else "Inactivo"
+        status = "Activo" if ac_power>0.1 else "Inactivo"
         
         inverters.append({
             "name": f"Inversor {inv_num}",
             "voltage_dc": round(voltage, 1),
             "current_dc": round(current, 2),
-            "ac_power": round(power, 2),
+            "ac_power": round(ac_power, 2),
             "efficiency": efficiency,
             "status": status
         })
-    
     return inverters
 
 ##############################################
